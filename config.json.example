@@ -1,0 +1,14 @@
+{
+  "port": "",
+  "providerEth": "https://eth-mainnet.alchemyapi.io/v2/<your key>",
+  "wallets": [
+    {
+      "name": "first",
+      "address": "0xfoo.."
+    },
+    {
+      "name": "second",
+      "address": "0xbar.."
+    }
+  ]
+}
