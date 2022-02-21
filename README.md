@@ -7,7 +7,7 @@ This repository contains implementation of bot reporting one or more wallets pos
 1. create `config.json` from `config.json.example`
 2. `npm i`
 3. `npm run build`
-4. start bot `ts-node src/index.ts` 
+4. start bot `npm start`
 
 
 ## Areas of improvements

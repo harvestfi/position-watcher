@@ -2,6 +2,7 @@
   "name": "position-watcher",
   "version": "0.1.0",
   "scripts": {
+    "start": "ts-node src/index.ts",
     "build": "typechain --target ethers-v5 ./abi/*.json"
   },
   "devDependencies": {
@@ -31,7 +32,6 @@
     "npm": "^8.5.0",
     "prom-client": "^14.0.1",
     "prompt": "^1.1.0",
-    "ts-node": "^10.1.0",
-    "tslog": "^3.2.2"
+    "ts-node": "^10.1.0"
   }
 }
