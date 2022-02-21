@@ -2,7 +2,7 @@
   "name": "position-watcher",
   "version": "0.1.0",
   "scripts": {
-    "build": "typechain --target ethers-v5 ./abi/*.json && tsc"
+    "build": "typechain --target ethers-v5 ./abi/*.json"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^9.0.0",
