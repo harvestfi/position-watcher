@@ -7,7 +7,8 @@ export class PromServer {
   private server: express.Express
   private supplyMetric: promClient.Gauge<'wallet'>
   private borrowMetric: promClient.Gauge<'wallet'>
-  private percentageMetric: promClient.Gauge<'wallet'>
+  private limitMetric: promClient.Gauge<'wallet'>
+  private limitPercentageMetric: promClient.Gauge<'wallet'>
 
   constructor(port = 9094) {
     this.port = port
@@ -25,8 +26,14 @@ export class PromServer {
       registers: [this.register],
       labelNames: ['wallet'],
     })
-    this.percentageMetric = new promClient.Gauge({
-      name: 'borrow_percent',
+    this.limitMetric = new promClient.Gauge({
+      name: 'borrow_limit',
+      help: 'borrow limit amount',
+      registers: [this.register],
+      labelNames: ['wallet'],
+    })
+    this.limitPercentageMetric = new promClient.Gauge({
+      name: 'borrow_limit_percent',
       help: 'borrowed percentage',
       registers: [this.register],
       labelNames: ['wallet'],
@@ -61,7 +68,11 @@ export class PromServer {
     this.borrowMetric.set({ wallet }, amount)
   }
 
-  setPercentage(wallet: string, amount: number) {
-    this.percentageMetric.set({ wallet }, amount)
+  setLimit(wallet: string, amount: number) {
+    this.limitMetric.set({ wallet }, amount)
+  }
+
+  setLimitPercentage(wallet: string, amount: number) {
+    this.limitPercentageMetric.set({ wallet }, amount)
   }
 }

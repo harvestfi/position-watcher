@@ -27,6 +27,7 @@ export class Comptroller {
     const assets = await this.comptroller.getAssetsIn(account)
     let totalSupplied = 0
     let totalBorrowed = 0
+    let totalLimit = 0
 
     for (let i = 0; i < assets.length; i++) {
       const assetInstance = LendingToken__factory.connect(assets[i], this.provider)
@@ -45,15 +46,18 @@ export class Comptroller {
         underlyingDecimals,
       )
 
+      const market = await this.getMarket(assetInstance.address)
       const underlyingPrice = await this.getPrice(underlying)
 
       const usdSupplied = supplyBalance * underlyingPrice
       const usdBorrowed = borrowBalance * underlyingPrice
-
+      if (market.isListed) {
+        totalLimit += usdSupplied * market.collateralFactor
+      }
       totalSupplied += usdSupplied
       totalBorrowed += usdBorrowed
     }
-    return { supplied: totalSupplied, borrowed: totalBorrowed }
+    return { supplied: totalSupplied, borrowed: totalBorrowed, limit: totalLimit }
   }
 
   formatUnits(value: BigNumberish, decimals: number) {
@@ -98,6 +102,24 @@ export class Comptroller {
       return tokenPrice
     } else {
       return Number(cachedValue)
+    }
+  }
+
+  async getMarket(address: string) {
+    const cacheKey = 'markets_' + address.toLowerCase()
+    const cachedValue: { isListed: boolean; collateralFactor: number } | undefined = this.cache.get(
+      cacheKey,
+    )
+    if (cachedValue == undefined) {
+      const markets = await this.comptroller.markets(address)
+      const market: { isListed: boolean; collateralFactor: number } = {
+        isListed: markets.isListed || false,
+        collateralFactor: this.formatUnits(markets.collateralFactorMantissa, 18),
+      }
+      this.cache.set(cacheKey, market)
+      return market
+    } else {
+      return cachedValue
     }
   }
 }

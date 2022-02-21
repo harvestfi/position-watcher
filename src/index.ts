@@ -32,14 +32,17 @@ async function main() {
       const position = await rariComptroller.getRariBalance(wallet.address)
       promServer.setSupply(wallet.name, position.supplied)
       promServer.setBorrow(wallet.name, position.borrowed)
-      promServer.setPercentage(wallet.name, (position.borrowed / position.supplied) * 100)
+      promServer.setLimit(wallet.name, position.limit)
+      promServer.setLimitPercentage(wallet.name, (position.borrowed / position.limit) * 100)
       console.log(
         wallet.name +
           ': $' +
           position.supplied.toLocaleString('en-US') +
-          ' supplied / $' +
+          ' supplied and $' +
           position.borrowed.toLocaleString('en-US') +
-          ' borrowed',
+          ' borrowed of ' +
+          position.limit.toLocaleString('en-US') +
+          ' borrow limit',
       )
     })
     await sleep(CHECK_INTERVAL * 60 * 1000)
