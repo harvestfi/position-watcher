@@ -1,0 +1,17 @@
+[Unit]
+Description=Position watcher
+After=network.target auditd.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=watcher
+Group=watcher
+WorkingDirectory=/home/watcher/position-watcher
+ExecStart=bash -c 'source /home/watcher/.nvm/nvm.sh && npm start'
+Restart=always
+RestartSec=120s
+
+[Install]
+WantedBy=default.target
+
